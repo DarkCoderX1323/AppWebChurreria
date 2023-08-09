@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bienvenido a Q'Churros</title>
+    <title>Iniciar Sesión</title>
 </head>
 <body>
     <h2>Iniciar Sesión</h2>
-    <form action="login.py" method="post">
+    <form action="login.php" method="post">
         <label for="username">Usuario:</label>
         <input type="text" id="username" name="username" required><br><br>
         
