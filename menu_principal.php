@@ -45,6 +45,11 @@
             background-color: #F5F5F5; /* Cambia el color de fondo al pasar el mouse */
         }
 
+        .articulo img {
+            max-width: 100%; /* Hace que la imagen se ajuste a su contenedor */
+            height: auto;
+        }
+
         /* Estilos para la cola de compras */
         .cola {
             width: 25%;
@@ -92,7 +97,7 @@
 </head>
 <body>
     <div class="navbar">
-        <img class="logo" src="logo.png" alt="Logo de la empresa">
+        <img class="logo" src="https://clubfranquicia.pe/public/imagen/franquicia/club-franquicia-peru-q-churros-1505249847.png" alt="Logo de la empresa">
         <div class="user-info">
             <div class="user-icon">
                 <i class="fas fa-user"></i>
@@ -115,7 +120,7 @@
                 $saldo_caja = 0.00; // Valor por defecto si no se puede obtener de la base de datos
 
                 // Consulta para obtener el nombre del usuario y el saldo de la caja
-                $sql = "SELECT nombre, saldo FROM Usuario WHERE id = 1"; // Cambia el 1 por el ID del usuario en sesión
+                $sql = "SELECT nombre, saldo FROM Usuario WHERE id = 76534813"; // Cambia el 1 por el ID del usuario en sesión
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
