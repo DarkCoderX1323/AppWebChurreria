@@ -104,35 +104,40 @@
             </div>
             <div>
                 <?php
-                // Conexión a la base de datos y consulta del nombre del usuario y saldo
-                $db_host = "localhost";
-                $db_user = "root";
-                $db_pass = "1234";
-                $db_name = "appchurreriadb";
+    session_start();
 
-                $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    $db_host = "localhost";
+    $db_user = "root";
+    $db_pass = "1234";
+    $db_name = "appchurreriadb";
 
-                if ($conn->connect_error) {
-                    die("Error de conexión: " . $conn->connect_error);
-                }
+    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
-                $nombre_usuario = "Nombre Usuario"; // Valor por defecto si no se puede obtener de la base de datos
-                $saldo_caja = 0.00; // Valor por defecto si no se puede obtener de la base de datos
+    if ($conn->connect_error) {
+        die("Error de conexión: " . $conn->connect_error);
+    }
 
-                // Consulta para obtener el nombre del usuario y el saldo de la caja
-                $sql = "SELECT nombre, saldo FROM Usuario WHERE id = 76534813"; // Cambia el 1 por el ID del usuario en sesión
-                $result = $conn->query($sql);
+    $usuario_id = $_SESSION["usuario_id"];
 
-                if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $nombre_usuario = $row["nombre"];
-                    $saldo_caja = $row["saldo"];
-                }
+    $sql_usuario = "SELECT nombre, saldo FROM Usuario WHERE id = $usuario_id";
+    $result_usuario = $conn->query($sql_usuario);
 
-                echo "Hola, $nombre_usuario";
-                ?>
+    if (isset($_SESSION["usuario_id"])) {
+        $usuario_id = $_SESSION["usuario_id"];
+        $sql_info_usuario = "SELECT nombre, saldo FROM Usuario WHERE id = $usuario_id";
+        $result_info = $conn->query($sql_info_usuario);
+
+        if ($result_info->num_rows > 0) {
+            $row_info = $result_info->fetch_assoc();
+            $nombre_usuario = $row_info["nombre"];
+            $saldo_caja = $row_info["saldo"];
+            echo "Hola, $nombre_usuario";
+            echo "<br>";
+            echo "Saldo: $" . number_format($saldo_caja, 2);
+        }
+    }
+    ?>
                 <br>
-                Saldo: $<?php echo number_format($saldo_caja, 2); ?>
             </div>
         </div>
     </div>

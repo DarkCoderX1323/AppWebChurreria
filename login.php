@@ -20,7 +20,8 @@ if ($result->num_rows == 1) {
     $row = $result->fetch_assoc();
     $stored_password = $row["password"];
     if ($password === $stored_password) {
-        // Las credenciales son válidas, redirigir al menú principal
+        session_start();
+        $_SESSION["usuario_id"] = $row["id"];
         header("Location: menu_principal.php");
         exit();
     } else {
