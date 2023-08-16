@@ -3,26 +3,58 @@
 <head>
     <title>Menú Principal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         /* Estilos para la barra de navegación */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             background-color: #FF1493; /* Color rosa tipo Barbie */
+        }
+        .navbar-text {
             color: white;
+            padding-right: 15px;
+        }
+        .navbar-brand {
+            padding: 0 15px;
+        }
+        .navbar-text {
+            color: white;
+            padding-right: 15px;
+        }
+        .operations {
+            position: relative;
+            cursor: pointer;
+            color: white;
+        }
+        .operations-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: none;
+            min-width: 160px;
+        }
+        .operations.active .operations-menu {
+            display: block;
+        }
+        .operations-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .operations-menu li {
             padding: 10px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: right;
+            cursor: pointer;
         }
-        .logo {
-            width: 80px; /* Ajusta el tamaño del logo según sea necesario */
+        .operations-menu li:last-child {
+            border-bottom: none;
         }
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-        .user-icon {
-            margin-right: 10px;
-            font-size: 20px;
+
+        .clock {
+            color: white;
+            margin-right: 15px;
         }
 
         /* Estilos para los artículos */
@@ -96,13 +128,14 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <img class="logo" src="https://clubfranquicia.pe/public/imagen/franquicia/club-franquicia-peru-q-churros-1505249847.png" alt="Logo de la empresa">
-        <div class="user-info">
-            <div class="user-icon">
-                <i class="fas fa-user"></i>
-            </div>
-            <div>
+<nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">
+            <img src="https://clubfranquicia.pe/public/imagen/franquicia/club-franquicia-peru-q-churros-1505249847.png" alt="Logo de la empresa" height="40">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <span class="navbar-text clock"></span>
                 <?php
     session_start();
 
@@ -137,10 +170,22 @@
         }
     }
     ?>
-                <br>
-            </div>
+             </span>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Registro de Ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cierre de Caja</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cerrar Sesión</a>
+                </li>
+            </ul>
         </div>
-    </div>
+    </nav>
 
     <div class="articulos">
         <?php
@@ -221,6 +266,32 @@
             total = 0;
             actualizarCola();
         }
+
+        // Manejo del menú de operaciones
+        const operationsMenu = document.querySelector(".operations");
+        const operationsSubMenu = operationsMenu.querySelector(".operations-menu");
+        
+        operationsMenu.addEventListener("click", () => {
+            operationsMenu.classList.toggle("active");
+        });
+        
+        // Mostrar la hora en tiempo real
+        function updateClock() {
+            const currentTime = new Date();
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const seconds = currentTime.getSeconds();
+            
+            const formattedTime = `${hours}:${addLeadingZero(minutes)}:${addLeadingZero(seconds)}`;
+            
+            document.querySelector(".clock").textContent = formattedTime;
+        }
+        
+        function addLeadingZero(number) {
+            return number < 10 ? "0" + number : number;
+        }
+        
+        setInterval(updateClock, 1000); // Actualizar cada segundo
     </script>
 </body>
 </html>
