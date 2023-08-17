@@ -64,11 +64,11 @@
             width: 70%;
         }
         .articulo {
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             border-radius: 5px;
             margin: 10px;
             padding: 10px;
-            width: 120px;
+            width: 220px;
             text-align: center;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -204,7 +204,6 @@
                 echo '<img src="' . $imagen_articulo . '" alt="' . $nombre_articulo . '">';
                 echo '<h4>' . $nombre_articulo . '</h4>';
                 echo '<p>Precio: $' . number_format($precio_articulo, 2) . '</p>';
-                echo '<p>Stock: ' . $stock_articulo . '</p>';
                 echo '</div>';
             }
         } else {
@@ -219,7 +218,10 @@
         </ul>
         <div class="total" id="total">Total: $0.00</div>
         <button onclick="eliminarItem()">Eliminar Item</button>
-        <button onclick="realizarVenta()">Realizar Venta</button>
+        <h3>Documento del Cliente</h3>
+        <input type="text" id="documentoCliente" placeholder="Documento del cliente">
+
+        <button onclick="finalizarVenta()">Finalizar Venta</button>
     </div>
 
     <script>
@@ -292,6 +294,28 @@
         }
         
         setInterval(updateClock, 1000); // Actualizar cada segundo
+
+        function finalizarVenta() {
+        var documentoCliente = document.getElementById("documentoCliente").value;
+        if (cola.length > 0) {
+            var fechaHora = new Date().toISOString().slice(0, 19).replace('T', ' '); // Obtiene la fecha y hora actual en formato MySQL
+            var totalImporte = total.toFixed(2);
+
+            // Envía los datos al servidor para guardar la venta en la base de datos
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "guardar_venta.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert("Venta finalizada con éxito.");
+                    window.location.reload(); // Recarga la página después de finalizar la venta
+                }
+            };
+            xhr.send("importe=" + totalImporte + "&fecha_hora=" + fechaHora + "&documento_cliente=" + documentoCliente);
+        } else {
+            alert("No hay elementos en la cola de compras.");
+        }
+    }
     </script>
 </body>
 </html>
