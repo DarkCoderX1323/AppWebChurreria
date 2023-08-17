@@ -175,7 +175,7 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Registro de Ventas</a>
+                    <a class="nav-link" href="ventas.php">Registro de Ventas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Cierre de Caja</a>
