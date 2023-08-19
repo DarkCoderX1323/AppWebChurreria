@@ -213,16 +213,15 @@
     </div>
 
     <div class="cola">
-        <h3>Cola de Compras</h3>
-        <ul id="cola-list">
-        </ul>
-        <div class="total" id="total">Total: $0.00</div>
-        <button onclick="eliminarItem()">Eliminar Item</button>
-        <h3>Documento del Cliente</h3>
-        <input type="text" id="documentoCliente" placeholder="Documento del cliente">
+    <h3>Cola de Compras</h3>
+    <ul id="cola-list">
+    </ul>
+    <div class="total" id="total">Total: $0.00</div>
+    <h3>Documento del Cliente</h3>
+    <input type="text" id="documentoCliente" placeholder="Documento del cliente">
 
-        <button onclick="finalizarVenta()">Finalizar Venta</button>
-    </div>
+    <button onclick="finalizarVenta()">Finalizar Venta</button>
+</div>
 
     <script>
         var cola = [];
@@ -260,62 +259,41 @@
             }
         }
 
-        function realizarVenta() {
-            // Aquí podrías enviar la cola de compras y el total a una página de procesamiento
-            // utilizando AJAX u otras tecnologías.
-            alert("Venta realizada con éxito.");
-            cola = [];
-            total = 0;
-            actualizarCola();
-        }
-
-        // Manejo del menú de operaciones
-        const operationsMenu = document.querySelector(".operations");
-        const operationsSubMenu = operationsMenu.querySelector(".operations-menu");
-        
-        operationsMenu.addEventListener("click", () => {
-            operationsMenu.classList.toggle("active");
-        });
-        
-        // Mostrar la hora en tiempo real
-        function updateClock() {
-            const currentTime = new Date();
-            const hours = currentTime.getHours();
-            const minutes = currentTime.getMinutes();
-            const seconds = currentTime.getSeconds();
-            
-            const formattedTime = `${hours}:${addLeadingZero(minutes)}:${addLeadingZero(seconds)}`;
-            
-            document.querySelector(".clock").textContent = formattedTime;
-        }
-        
-        function addLeadingZero(number) {
-            return number < 10 ? "0" + number : number;
-        }
-        
-        setInterval(updateClock, 1000); // Actualizar cada segundo
-
         function finalizarVenta() {
-        var documentoCliente = document.getElementById("documentoCliente").value;
-        if (cola.length > 0) {
-            var fechaHora = new Date().toISOString().slice(0, 19).replace('T', ' '); // Obtiene la fecha y hora actual en formato MySQL
-            var totalImporte = total.toFixed(2);
+    var documentoCliente = document.getElementById("documentoCliente").value;
+    if (cola.length > 0) {
+        var fechaHora = new Date().toISOString().slice(0, 19).replace('T', ' '); // Obtiene la fecha y hora actual en formato MySQL
+        var totalImporte = total.toFixed(2);
 
-            // Envía los datos al servidor para guardar la venta en la base de datos
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "guardar_venta.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    alert("Venta finalizada con éxito.");
-                    window.location.reload(); // Recarga la página después de finalizar la venta
-                }
-            };
-            xhr.send("importe=" + totalImporte + "&fecha_hora=" + fechaHora + "&documento_cliente=" + documentoCliente);
-        } else {
-            alert("No hay elementos en la cola de compras.");
-        }
+        // Envía los datos al servidor para guardar la venta en la base de datos
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "guardar_venta.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Actualiza el saldo del asesor
+                actualizarSaldoAsesor(totalImporte);
+                alert("Venta finalizada con éxito.");
+                window.location.reload(); // Recarga la página después de finalizar la venta
+            }
+        };
+        xhr.send("importe=" + totalImporte + "&fecha_hora=" + fechaHora + "&documento_cliente=" + documentoCliente);
+    } else {
+        alert("No hay elementos en la cola de compras.");
     }
+}
+
+function actualizarSaldoAsesor(monto) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "actualizar_saldo_asesor.php?monto=" + monto, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Saldo del asesor actualizado correctamente
+            actualizarSaldo(xhr.responseText); // Llamada a la función para actualizar el saldo en la página
+        }
+    };
+    xhr.send();
+}
     </script>
 </body>
 </html>
