@@ -178,10 +178,10 @@
                     <a class="nav-link" href="ventas.php">Registro de Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cierre de Caja</a>
+                    <a class="nav-link" href="#" onclick="cerrarCaja()">Cierre de Caja</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cerrar Sesión</a>
+                    <a class="nav-link" href="index.php">Cerrar Sesión</a>
                 </li>
             </ul>
         </div>
@@ -290,6 +290,37 @@ function actualizarSaldoAsesor(monto) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Saldo del asesor actualizado correctamente
             actualizarSaldo(xhr.responseText); // Llamada a la función para actualizar el saldo en la página
+        }
+    };
+    xhr.send();
+}
+
+function cerrarCaja() {
+    if (confirm("¿Estás seguro que deseas hacer el cierre de caja?")) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "guardar_cierre.php", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                if (response === "success") {
+                    alert("Cierre de caja realizado con éxito.");
+                    location.reload(); // Recarga la página después de cerrar la caja
+                } else {
+                    alert("Error al realizar el cierre de caja.");
+                }
+            }
+        };
+        xhr.send();
+    }
+}
+
+function cerrarSesion() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "cerrar_sesion.php", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            alert("Sesión cerrada. Redireccionando...");
+            window.location.href = "index.php"; // Redirecciona a la página de inicio de sesión
         }
     };
     xhr.send();

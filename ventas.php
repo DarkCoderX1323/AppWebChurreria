@@ -181,10 +181,10 @@
                     <a class="nav-link" href="#">Registro de Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cierre de Caja</a>
+                    <a class="nav-link" href="#" onclick="confirmarCierreCaja()">Cierre de Caja</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cerrar Sesión</a>
+                    <a class="nav-link" href="index.php">Cerrar Sesión</a>
                 </li>
             </ul>
         </div>
