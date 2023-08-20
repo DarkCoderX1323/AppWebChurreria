@@ -201,6 +201,8 @@
         $result_ventas = $conn->query($sql_ventas);
 
         if ($result_ventas->num_rows > 0) {
+            $suma_total = 0; // Variable para almacenar la suma total de los importes
+    
             echo '<table class="table">
                     <thead>
                         <tr>
@@ -208,26 +210,32 @@
                             <th>Importe</th>
                             <th>Fecha y Hora</th>
                             <th>Asesor</th>
-                            <th>Documento Cliente</th>
+                            <th>Documento de Identidad</th>
                         </tr>
                     </thead>
                     <tbody>';
-            
+                
             while ($row_venta = $result_ventas->fetch_assoc()) {
                 echo '<tr>
                         <td>' . $row_venta["id"] . '</td>
                         <td>' . $row_venta["importe"] . '</td>
                         <td>' . $row_venta["fecha_hora"] . '</td>
                         <td>' . $row_venta["nombre_usuario"] . '</td>
-                        <td>' . $row_venta["documento_cliente"] . '</td>
+                        <td>' . (($row_venta["documento_cliente"] !== null && $row_venta["documento_cliente"] !== "") ? $row_venta["documento_cliente"] : "N/A") . '</td>
                       </tr>';
+                
+                $suma_total += $row_venta["importe"]; // Agregar el importe actual a la suma total
             }
-
+        
             echo '</tbody></table>';
-        } else {
-            echo '<p class="text-center">No hay ventas registradas.</p>';
-        }
-        ?>
+            
+            // Mostrar la suma total al final de la tabla
+            echo '<div class="text-center mt-3"><strong>Suma Total de Importes:</strong> $' . number_format($suma_total, 2) . '</div>';
+            
+            } else {
+                echo '<p class="text-center">No hay ventas registradas.</p>';
+            }
+            ?>
     </div>
 </body>
 </html>
